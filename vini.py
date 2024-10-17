@@ -40,13 +40,8 @@ Base.metadata.create_all(bind=FUNCIONARIO)
 
 # Salvar no banco de dados.
 os.system("cls || clear")
-def exibindo_funcionario():
-    lista_funcionarios = session.query(Usuario).all()
-
-    for funcionario in lista_funcionarios:
-        print(f"{funcionario.id} - Nome: {funcionario.nome} - Idade: {funcionario.idade} - CPF: {funcionario.cpf} - Setor: {funcionario.setor} - Função: {funcionario.funcao} - Salário: {funcionario.salario} - Telefone: {funcionario.telefone}")
-
-print("""
+def rh_system():
+    print("""
     === RH SYSTEM ===
 1 - Adicionar funcionário
 2 - Consultar funcionário
@@ -56,63 +51,84 @@ print("""
 0 - Sair do sistema
       """)
 
-opcao = input("Digite o que deseja: ")
+def exibindo_funcionario(funcionario):
+    print(f"{funcionario.id} - Nome: {funcionario.nome} - Idade: {funcionario.idade} - CPF: {funcionario.cpf} - Setor: {funcionario.setor} - Função: {funcionario.funcao} - Salário: {funcionario.salario} - Telefone: {funcionario.telefone}")
+
+def adicionar_funcionario(session):
+    print("\nSolicitando dados para o funcionário")
+    funcionario = Usuario(
+        nome=input("\nDigite seu nome: "),
+        idade=input("Digite sua idade: "),
+        cpf=input("Digite seu cpf: "),
+        setor=input("Digite o setor do seu trabalho: "),
+        funcao=input("Digite sua função na empresa: "),
+        salario=input("Digite seu salário: "),
+        telefone=input("Digite seu telefone: ")
+    )
+    session.add(funcionario)
+    session.commit()
+
+def consultar_funcionario(session):
+    cpf_usuario = input("\nDigite o cpf do usuário desejado: ")
+    funcionario = session.query(Usuario).filter_by(cpf=cpf_usuario).first()
+    if funcionario:
+        exibindo_funcionario(funcionario)
+    else:
+        print("Funcionário não encontrado.")
+
+def atualizar_funcionario(session):
+    cpf_usuario = input("\nDigite o cpf do usuário para atualizar: ")
+    funcionario = session.query(Usuario).filter_by(cpf=cpf_usuario).first()
+    if funcionario:
+        funcionario.nome = input("Digite seu nome: ")
+        funcionario.idade = input("Digite sua idade: ")
+        funcionario.cpf = input("Digite seu CPF: ")
+        funcionario.setor = input("Digite seu setor: ")
+        funcionario.funcao = input("Digite sua função: ")
+        funcionario.salario = input("Digite seu salário: ")
+        funcionario.telefone = input("Digite seu telefone: ")
+        session.commit()
+        print("Dados atualizados com sucesso.")
+    else:
+        print("Funcionário não encontrado.")
+
+def excluir_funcionario(session):
+    cpf_usuario = input("\nDigite o cpf do usuário para ser excluído: ")
+    funcionario = session.query(Usuario).filter_by(cpf=cpf_usuario).first()
+    if funcionario:
+        session.delete(funcionario)
+        session.commit()
+        print(f"{funcionario.nome} excluído com sucesso.")
+    else:
+        print("Funcionário não encontrado.")
+
+def listar_funcionarios(session):
+    print("\nExibindo todos os usuários do banco de dados.")
+    lista_funcionarios = session.query(Usuario).all()
+    for funcionario in lista_funcionarios:
+        exibindo_funcionario(funcionario)
+
+rh_system()
+
 while True:
+    opcao = input("\nDigite o que deseja: ")
     match(opcao):
         case '1':
-            print("Solicitando dados para o funcionário")
-            insirir_nome = input("Digite seu nome: ")
-            inserir_idade = input("Digite sua idade: ")
-            inserir_cpf = input("Digite seu cpf: ")
-            inserir_setor = input("Digite o setor do seu trabalho: ")
-            inserir_funcao = input("Digite sua função na empresa: ")
-            inserir_salario = input("Digite seu salário: ")
-            inserir_telefone = input("Digite seu telefone: ")
-
-            funcionario = Usuario(nome=insirir_nome, idade=inserir_idade, cpf= inserir_cpf, setor= inserir_setor, funcao= inserir_funcao, salario= inserir_salario, telefone= inserir_telefone)
-            session.add(funcionario)
-            session.commit()
+            adicionar_funcionario(session)
 
         case '2':
-            print("\nExibindo o usuário desejado")
-            exibindo_funcionario()
+            exibindo_funcionario(session)
 
         case '3':
-            print("\nAtualizando dados do usuário.")
-            funcionario = session.query(Usuario).filter_by(cpf = cpf_usuario).first()
-
-            novos_dados = Usuario(
-                nome = input("Digite seu nome: "),
-                idade= input("Digite sua idade: "),
-                cpf = input("Digite seu CPF: "),
-                setor = input("Digite seu setor: "),
-                funcao = input("Digite sua função: "),
-                salario = input("Digite seu salário: "),
-                telefone = input("Digite seu telefone: ")
-            )
-
-            funcionario = novos_dados
-            session.add(funcionario)
-            session.commit()
+            atualizar_funcionario(session)
 
         case '4':
-            print("\nExcluindo um usuário.")
-            cpf_usuario = input("Digite o cpf do usuário para ser excluído: ")
-
-            funcionario = session.query(Usuario).filter_by(cpf = cpf_usuario).first()
-            session.delete(funcionario)
-            session.commit()
-
-            os.system("cls || clear")
-            print(f"{funcionario.nome} excluído com sucesso.")
+            excluir_funcionario(session)
 
         case '5':
-            print("\nExibindo todos os usuários do banco de dados.")
-            lista_funcionarios = session.query(Usuario).all()
+            listar_funcionarios(session)
 
-            for funcionario in lista_funcionarios:
-                print(f"{funcionario.id} - Nome: {funcionario.nome} - Idade: {funcionario.idade} - CPF: {funcionario.cpf} - Setor: {funcionario.setor} - Função: {funcionario.funcao} - Salário: {funcionario.salario} - Telefone: {funcionario.telefone}")
         case _:
-            print("\nSaindo do sistema")
+            print("Saindo do sistema")
             break
 
