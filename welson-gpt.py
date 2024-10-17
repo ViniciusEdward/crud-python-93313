@@ -16,7 +16,7 @@ session = Session()
 Base = declarative_base()
 
 class Empresa(Base):
-    __tablename__ = "usuarios"
+    __tablename__ = "Empresa"
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     nome = Column("nome", String)
@@ -24,7 +24,7 @@ class Empresa(Base):
     cpf = Column("CPF", String)
     setor = Column("Setor", String)
     funcao = Column("Função", String)
-    salario = Column("Salario", Float)  # Mudado para Float para corresponder ao tipo
+    salario = Column("Salario", Float)  
     telefone = Column("Telefone", String)
 
     def __init__(self, nome: str, idade: int, cpf: str, setor: str, 

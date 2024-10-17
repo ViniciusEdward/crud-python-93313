@@ -50,6 +50,18 @@ lista_empresa = session.query(Empresa).all()
 for bens in lista_empresa:
     print(f"{bens.id} - Nome: {bens.nome} - Idade: {bens.idade} - CPF: {bens.cpf} -Setor: {bens.setor} -Função: {bens.funcao} -Salario: {bens.salario} -Telefone: {bens.telefone}")
 
+# Apagar o excesso
+print("\nApagando a preguiça.")
+cpf_paixao = input("Informe o CPF do trabalhador, para o clthanos fazer o trabalho: ")
+
+# Otmizando os dados da empresa 
+print("\nAtualizando dados da empresa.")
+bens_capitais = session.query(bens_capitais).filter_by(cpf = cpf_paixao).first()
+session.delete(bens_capitais)
+session.commit()
+
+print(f"{bens_capitais.nome} excluído com sucesso.")
+
 #limpa tela
 os.system("cls || clear")
 
@@ -101,8 +113,7 @@ match(opcao):
     case 3:
         # atualizando os dados da empresa
         print("\nAtualizando dados da empresa.")
-        cpf_funcionario=session.query(Empresa).filter_by(bens_capitais)
-        bens_capitais = session.query(Empresa).filter_by(cpf_funcionario).first()
+        bens_capitais = session.query(Empresa).filter_by(cpf=cpf_paixao).first()
 
         novos_dados = Empresa(
             nome = input("Digite seu nome: "),
