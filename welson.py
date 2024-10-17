@@ -50,18 +50,6 @@ lista_empresa = session.query(Empresa).all()
 for bens in lista_empresa:
     print(f"{bens.id} - Nome: {bens.nome} - Idade: {bens.idade} - CPF: {bens.cpf} -Setor: {bens.setor} -Função: {bens.funcao} -Salario: {bens.salario} -Telefone: {bens.telefone}")
 
-# Apagar o excesso
-print("\nApagando a preguiça.")
-cpf_paixao = input("Informe o CPF do trabalhador, para o clthanos fazer o trabalho: ")
-
-# Otmizando os dados da empresa 
-print("\nAtualizando dados da empresa.")
-bens_capitais = session.query(bens_capitais).filter_by(cpf = cpf_paixao).first()
-session.delete(bens_capitais)
-session.commit()
-
-print(f"{bens_capitais.nome} excluído com sucesso.")
-
 #limpa tela
 os.system("cls || clear")
 
@@ -76,22 +64,6 @@ for bens in lista_empresa:
 # atualizando os dados da empresa
 print("\nAtualizando dados da empresa.")
 bens_capitais = session.query(Empresa).filter_by(cpf=cpf_paixao).first()
-
-novos_dados = Empresa(
-    nome = input("Digite seu nome: "),
-    idade= int(input("Digite sua Idade: ")),
-    cpf = input("Digite seu CPF: "),
-    setor= input("Digite seu Setor:"),
-    funcao= input("Digite sua função:"),
-    salario= float(input("Digite seu Salario")),
-    telefone= input("Digite seu telfone")   
-)
-bens_capitais = novos_dados
-session.add(bens_capitais)
-session.commit()
-
-# Fechando conexão.    
-session.close()
 
 print("""
 === RH System ===
@@ -126,3 +98,35 @@ match(opcao):
         print("\nConsultando  os dados de um funcionario.")
         cpf_funcionario=input("Digite o CPF do funcionario:")
         lista_empresa = session.query(Empresa).all(cpf_funcionario)
+    case 3:
+        # atualizando os dados da empresa
+        print("\nAtualizando dados da empresa.")
+        bens_capitais = session.query(Empresa).filter_by(cpf=cpf_paixao).first()
+
+        novos_dados = Empresa(
+            nome = input("Digite seu nome: "),
+            idade= int(input("Digite sua Idade: ")),
+            cpf = input("Digite seu CPF: "),
+            setor= input("Digite seu Setor:"),
+            funcao= input("Digite sua função:"),
+            salario= float(input("Digite seu Salario")),
+            telefone= input("Digite seu telfone")   
+        )
+        bens_capitais = novos_dados
+        session.add(bens_capitais)
+        session.commit()
+
+        # Fechando conexão.    
+        session.close()
+    case 4:
+        # Apagar o excesso
+        print("\nApagando a preguiça.")
+        cpf_paixao = input("Informe o CPF do trabalhador, para o clthanos fazer o trabalho: ")
+
+        # Otmizando os dados da empresa 
+        print("\nAtualizando dados da empresa.")
+        bens_capitais = session.query(bens_capitais).filter_by(cpf = cpf_paixao).first()
+        session.delete(bens_capitais)
+        session.commit()
+
+        print(f"{bens_capitais.nome} excluído com sucesso.")
