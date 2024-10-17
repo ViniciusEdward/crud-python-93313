@@ -101,7 +101,8 @@ match(opcao):
     case 3:
         # atualizando os dados da empresa
         print("\nAtualizando dados da empresa.")
-        bens_capitais = session.query(Empresa).filter_by(cpf=cpf_paixao).first()
+        cpf_funcionario=session.query(Empresa).filter_by(bens_capitais)
+        bens_capitais = session.query(Empresa).filter_by(cpf_funcionario).first()
 
         novos_dados = Empresa(
             nome = input("Digite seu nome: "),
